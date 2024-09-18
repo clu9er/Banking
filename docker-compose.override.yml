@@ -1,0 +1,40 @@
+services:
+  banking.api:
+    container_name: banking.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8081
+      - ASPNETCORE_HTTPS_PORTS=8080
+    ports:
+      - "8081:8081"
+      - "8080:8080"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    depends_on:
+      - banking.db
+      - banking.redis
+  
+  banking.db:
+    container_name: postgres
+    restart: always
+    ports: 
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  
+  banking.redis:
+    container_name: redis
+    restart: always
+    ports: 
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:

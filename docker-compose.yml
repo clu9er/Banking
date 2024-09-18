@@ -1,0 +1,12 @@
+services:
+  banking.api:
+    image: ${DOCKER_REGISTRY-}banking
+    build:
+      context: .
+      dockerfile: src/Banking.API/Dockerfile
+
+  banking.db:
+    image: postgres
+
+  banking.redis:
+    image: redis:alpine
